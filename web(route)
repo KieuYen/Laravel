@@ -1,0 +1,76 @@
+<?php
+
+// use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| This file is where you may define all of the routes that are handled
+| by your application. Just tell Laravel the URIs it should respond
+| to using a Closure or controller method. Build something great!
+|
+*/
+
+Route::get('/','Frontend\FrontendController@getHome' );
+Route::get('product','Frontend\FrontendController@getPageProduct');
+Route::get('cart','Frontend\FrontendController@getCart');
+Route::get('about','Frontend\FrontendController@getAbout');
+Route::get('contact','Frontend\FrontendController@getContact');
+Route::get('prod-detail','Frontend\FrontendController@getDetail');
+Route::get('login-customer','Frontend\FrontendController@getLogin');
+Route::get('signIn','Frontend\SignInController@getSignIn');
+Route::post('signIn','Frontend\SignInController@postSignIn');
+
+Route::group(['namespace'=>'Admin'],function(){
+    Route::group(['prefix'=>'login','middleware'=>'CheckLogedIn'],function(){
+        Route::get('/','LoginController@getLogin');
+        Route::post('/','LoginController@postLogin');
+        });
+    
+    Route::get('logout','HomeController@getLogout');
+    Route::group(['prefix'=>'admin','middleware'=>'CheckLogedOut'],function(){
+         Route::get('home','HomeController@getHome');
+        
+        Route::group(['prefix'=>'category-prod'],function(){
+            Route::get('/','CategoryProdController@getCate');
+            Route::post('/','CategoryProdController@postAddCate');
+            Route::get('edit/{id}','CategoryProdController@getEditCate');
+            Route::get('delete/{id}','CategoryProdController@getDeleteCate');
+        });
+        Route::group(['prefix'=>'category-acces'],function(){
+            Route::get('/','CategoryAccesController@getCate');
+            Route::get('edit','CategoryAccesController@getEditCate');
+        });
+
+        Route::group(['prefix'=>'product'],function(){
+            Route::get('/','ProductController@getProd');
+            
+            Route::get('edit','ProductController@getEditProd');
+        });
+
+        Route::group(['prefix'=>'employees'],function(){
+            Route::get('/','EmployeesController@getEmp');
+            Route::get('edit','EmployeesController@getEditEmp');
+            Route::get('list','EmployeesController@getListEmp');
+            Route::get('shift','EmployeesController@getShiftEmp');
+        });
+
+        Route::group(['prefix'=>'orders'],function(){
+            Route::get('/','OrderController@getOrder');
+            Route::get('edit','OrderController@getEditOrder');
+            Route::get('check','OrderController@getCheckOrder');
+        });
+        Route::group(['prefix'=>'agency'],function(){
+            Route::get('/','AgencyController@getAgency');
+        });
+
+        Route::group(['prefix'=>'import'],function(){
+            Route::get('/','ImportController@getImport');
+            Route::get('detail','ImportController@getDetailImport');
+        });
+
+        
+    });
+});
